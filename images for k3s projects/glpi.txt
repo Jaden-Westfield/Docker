@@ -1,0 +1,17 @@
+FROM ubuntu:latest
+
+RUN apt update && apt upgrade -y && \
+    apt install -y apache2 libapache2-mod-php wget curl && \
+    apt install -y php php-curl php-zip php-bz2 php-gd php-imagick php-intl php-apcu php-memcache php-imap php-mysql php-cas php-ldap php-tidy php-pear && \
+    sed -i 's/;session.cookie_httponly =.*/session.cookie_httponly = on/' /etc/php/*/apache2/php.ini && \
+    VER=$(curl -s https://api.github.com/repos/glpi-project/glpi/releases/latest | grep tag_name | cut -d '"' -f 4) && \
+    wget https://github.com/glpi-project/glpi/releases/download/${VER}/glpi-${VER}.tgz -O /tmp/glpi.tgz && \
+    tar xvf /tmp/glpi.tgz -C /tmp && \
+    mv /tmp/glpi /var/www/html/ && \
+    chown -R www-data:www-data /var/www/html/glpi
+
+EXPOSE 8080
+
+CMD ["apache2ctl", "-D", "FOREGROUND"]
+
+# https://computingforgeeks.com/how-to-install-glpi-on-ubuntu-linux/

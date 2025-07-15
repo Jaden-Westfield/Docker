@@ -1,0 +1,22 @@
+FROM ubuntu:latest
+
+RUN apt update && \
+    apt install -y apt-transport-https software-properties-common wget gnupg
+
+# Import Grafana GPG key and add repository
+RUN mkdir -p /etc/apt/keyrings && \
+    wget -q -O - https://packages.grafana.com/gpg.key \
+      | gpg --dearmor > /etc/apt/keyrings/grafana.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stable main" \
+      > /etc/apt/sources.list.d/grafana.list && \
+    echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com beta main" \
+      >> /etc/apt/sources.list.d/grafana.list
+
+RUN apt update && apt install -y grafana
+#grafana-enterprise
+
+EXPOSE 3000
+CMD ["grafana-server", "--homepath=/usr/share/grafana"]
+
+#https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
+

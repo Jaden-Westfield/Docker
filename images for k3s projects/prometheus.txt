@@ -1,0 +1,24 @@
+FROM ubuntu:latest
+
+RUN apt update && \
+    apt install -y wget curl && \
+    useradd --no-create-home --shell /bin/false prometheus && \
+    mkdir -p /etc/prometheus /var/lib/prometheus && \
+    chown prometheus:prometheus /var/lib/prometheus && \
+    cd /tmp && \
+    wget https://github.com/prometheus/prometheus/releases/download/v2.54.1/prometheus-2.54.1.linux-amd64.tar.gz && \
+    tar -xvf prometheus-2.54.1.linux-amd64.tar.gz && \
+    mv prometheus-2.54.1.linux-amd64/prometheus prometheus-2.54.1.linux-amd64/promtool /usr/local/bin/ && \
+    mv prometheus-2.54.1.linux-amd64/consoles prometheus-2.54.1.linux-amd64/console_libraries /etc/prometheus/ && \
+    mv prometheus-2.54.1.linux-amd64/prometheus.yml /etc/prometheus/ && \
+    chown -R prometheus:prometheus /etc/prometheus /usr/local/bin/prometheus /usr/local/bin/promtool
+
+EXPOSE 9090
+
+USER prometheus
+
+CMD ["/usr/local/bin/prometheus", \
+  "--config.file=/etc/prometheus/prometheus.yml", \
+  "--storage.tsdb.path=/var/lib/prometheus", \
+  "--web.console.templates=/etc/prometheus/consoles", \
+  "--web.console.libraries=/etc/prometheus/console_libraries"]
