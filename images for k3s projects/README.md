@@ -52,3 +52,13 @@ here i enter the information of my database like the ip and port the user glpi a
 and then there is glpi that is connected to a external database. the main login is glpi and glpi.
 
 in the future I want to use atleast the glpi grafana and maybe prometheus images for my kubernetes cluster.
+
+### save the images
+To save these images i uses this dockersave command to save each image
+
+```bash
+docker save -o glpitest.tar glpitest
+docker save -o prome.tar prome
+docker save -o grafana.tar grafana
+docker save -o mysql.tar mysql:8.0
+```
