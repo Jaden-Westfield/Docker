@@ -31,7 +31,7 @@ this part is a little easier but first i will show the glpi file then i will sho
 
 ![alt text](images/glpi%20file.png)
 
-![alt text](images/grafana-images.png)
+![alt text](images/glpi%20images.png)
 
 ![alt text](images/dockercompose.png)
 this is my docker compose file where i will make my 2 containers for both services
